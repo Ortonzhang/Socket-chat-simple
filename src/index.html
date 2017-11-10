@@ -37,12 +37,14 @@
     <script>
         $(function () {
             var socket = io();
+
+            // 调用io()方法，生成socket对象，当点击按钮的时候，使用socket.emit发送事件
             $('.btn').click(function(){
               socket.emit('chat message', $('.form-control').val());
               $('.form-control').val('');
             });
 
-            // 监听 chat message事件 
+            // 捕获 chat message事件 将返回的消息添加到页面中
             socket.on('chat message', function(msg){
               $('.messages').append($('<li>').text(msg));
             });  
