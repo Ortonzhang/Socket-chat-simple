@@ -1,0 +1,55 @@
+extends layout
+block content
+    .container#app(style='margin-top:100px', v-cloak)
+        .row
+            .col-md-3
+                .panel.panel-primary
+                    .panel-heading 在线人员
+                    .panel-body.user-body
+                        ul.user-gropu.list-unstyled
+                            li(v-for="use in userList")
+                                a(@click="sendOne(use)")
+                                    img(:src="use.img")
+                                    span {{ use.name }}
+            .col-md-9
+                .panel.panel-primary
+                    .panel-heading
+                        span 聊天室
+                        span.pull-right 欢迎你！{{ userDefault }} 
+                    .panel-body
+                        .message-box(v-for="item in AllMsgList") 
+                            .message-info(:class="{'right':item.form.name == userDefault, 'left':item.form.name != userDefault}")
+                                .message-content 
+                                    span(v-if="item.type != 'img'") {{ item.msg }}
+                                    img(:src="item.msg", v-if="item.type == 'img'")
+                                .message-img
+                                    img(:src="item.form.img")
+                    .panel-footer
+                        p
+                            i.iconfont.iconfont-emoji(@click.stop="emojiShow")
+                                | &#xe6d4;
+                            i.iconfont.iconfont-img(@click="upImg")
+                                | &#xe66e;
+                        #emoji
+                            span(v-for="item in emojiGroup", @click="emoji(item)") {{ item }}
+                        textarea.form-control(placeholder='输入发言内容，回车发送', @keyup.enter="sendAll($event)", v-model="sendAllMsg")
+        .modal.fade.user-modal(tabindex="-1", data-backdrop="static")
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        h4.modal-title 请输入昵称
+                    .modal-body
+                        input.form-control.userName(type="text", v-model="userDefault")
+                    .modal-footer
+                        button.btn.btn-primary.save-userName(type='button', @click="saveUser") 确定
+        .modal.one-modal(tabindex="-1", data-backdrop="static")
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        h4.modal-title 发送给{{ oneInfo.name }}
+                    .modal-body
+                        input.form-control.userName(type="text", v-model="oneMsg")
+                    .modal-footer
+                        button.btn.btn-primary.save-userName(type='button', @click="oneEmit") 确定
+    script(src='/socket.io/socket.io.js')
+    script(src="/js/main.js")

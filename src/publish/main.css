@@ -1,0 +1,176 @@
+@font-face {
+    font-family: 'iconfont';
+    src: url('./font/iconfont.eot');
+    src: url('./font/iconfont.eot?#iefix') format('embedded-opentype'),
+    url('./font/iconfont.woff') format('woff'),
+    url('./font/iconfont.ttf') format('truetype'),
+    url('./font/iconfont.svg#iconfont') format('svg');
+}
+[v-cloak]{
+    display: none;
+}
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:25px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: pointer;
+    color:#999;
+    margin-right: 10px;
+}
+.iconfont-img{
+    font-size: 22px;
+}
+.iconfont:hover{
+    color: #40C5FF;
+}
+.user-body{
+    padding: 0;
+}
+.user-gropu{
+    height: 500px;
+    overflow-y: auto;
+}
+.user-gropu li{
+    display: block;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+}
+.user-gropu li a{
+    display: block;
+}
+.user-gropu li a:hover{
+    background: rgba(0,0,0,.1);
+    text-decoration:none;
+}
+.user-gropu li img{
+    width: 40px;
+    height: 40px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 5px;
+    background: #fff;
+}
+
+/* 聊天室样式 */
+
+.message-box{
+    margin-bottom: 10px;
+}
+.message-info{
+    display: flex;
+}
+.message-info.right{
+    justify-content: flex-end;
+}
+.message-info.left{
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+.right .message-content::before{
+    content: '';
+    border-color: transparent transparent transparent #b8db29;
+    border-width: 10px;
+    border-style: solid;
+    position: absolute;
+    right: -17px;
+}
+.left .message-content::before{
+    content: '';
+    border-color: transparent #ccc transparent transparent;
+    border-width: 10px;
+    border-style: solid;
+    position: absolute;
+    left: -17px;
+}
+.message-img img{
+    width: 40px;
+    height: 40px;
+}
+.left .message-content{
+    padding: 10px;
+    border-radius: 10px;
+    background: #ccc;
+    word-break: break-word;
+    position: relative;
+    margin-left: 10px;
+}
+.right .message-content{
+    padding: 10px;
+    border-radius: 10px;
+    background: #b8db29;
+    word-break: break-word;
+    position: relative;
+    margin-right: 10px;
+}
+.message-content img{
+    width: 100%;
+}
+#emoji{
+    width: 460px;
+    height: 260px;
+    padding: 5px;
+    position: absolute;
+    bottom: 120px;
+    left: -182px;
+    background: #fff;
+    border-radius: 10px;
+    display: none;
+    box-shadow: 0 0 5px rgba(0,0,0,.6);
+}
+#emoji span{
+    width: 30px;
+    display: inline-block;
+    font-size: 22px;
+    text-align: center;
+    cursor: pointer;
+}
+#emoji span:hover{
+    background: rgba(0,0,0,.1);
+}
+
+#emoji::after{
+    display:block;
+    content: '';
+    width: 0;
+    height: 0;
+    border-width: 12px 12px 0;
+    border-style: solid;
+    border-color: #fff transparent transparent;
+    position: absolute;
+    bottom: -5px;
+    left: 44%;
+    filter: drop-shadow(0 0 1px rgba(0,0,0,.6));
+}
+#emoji::before{
+    display: block;
+    content: '';
+    width: 42px;
+    height: 12px;
+    background: #fff;
+    position: absolute;
+    bottom: 0;
+    z-index: 3;
+    left: 43%;
+}
+.panel-body{
+    height: 500px;
+    overflow-y: auto;
+}
+.panel-footer{
+    background: #fff;
+    padding: 4px;
+}
+textarea.form-control{
+    border: none;
+    outline: none;
+    padding:5px; 
+    box-shadow: none;
+    resize:none;
+}
+textarea.form-control:focus{
+    box-shadow: none;
+    border: none;
+}
