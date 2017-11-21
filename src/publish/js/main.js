@@ -106,9 +106,9 @@ socket.on('messageAll', function(msg){
 socket.on('userUpdate',function(list){
     App.userList = list
 })
-socket.on('disconnect', function(use){
-    alert(`${use.name}离开了`)
-})
+// socket.on('disconnect', function(use){
+//     alert(`${use.name}离开了`)
+// })
 
 socket.on('toOne', function(obj){
     Messenger().post({
