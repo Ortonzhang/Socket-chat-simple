@@ -186,6 +186,117 @@ Socket.io主要有以下几点：
 
 打开浏览器你可以看到如下的页面
 
-![简易聊天室](http://upload-images.jianshu.io/upload_images/4060631-7738d6d9773b2e45.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![简易聊天室](./images/gif.gif)
 
+我们实现了非常简单的聊天室，接下来，我们来丰富它，代码在`zjx`分支
+
+## Socket.io API
+
+`Socket.io`由两部分组成：
+
+1、服务端  挂载或集成到nodeJS http服务器  `socket.io`
+
+2、客户端 加载到浏览器的客户端 `socket.io-client`
+
+
+先来说下服务端集成，分为简单的两步：
+
+1、引入模块并实例化
+	
+	// 这里使用koa框架，其他框架原理都一样
+	
+
+	const Koa = require('koa')
+	const app = new Koa()
+	
+	const http = require('http').Server(app.callback())
+	const io = require('socket.io')(http)
+	```
+	
+	// 引入`koa`并且初始化，引入`http`模块，将`koa`的回调当作`http.Server`的回调函数，最后将http传入实例化一个`socket.io`。
+
+
+2、设置连接后的操作
+
+	io.on('connection', function(socket){
+		socket.on('chat', function(msg){
+			socket.emit('client', msg)
+		})
+	})
+
+	// io.on函数接收'connection'字符串做为客户端发起连接的事件，连接成功后，调用带有		socket参数的回调函数。接收一个chat自定义的事件，使用socket.emit方法发送消息
+
+
+服务端集成好后，接下来是客户端
+
+在`</body>`标签中添加以下代码
+	
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io()
+		
+		socket.emit('chat', 'hello')
+		
+		socket.on('client', function(data){
+			console.log(data)
+		})
+	</script>
+	
+	// 加载客户端的js文件，调用io() 函数, 初始化socket对象 发送chat事件到服务端，这时候服务端接收到了chat事件，并发出了client事件，浏览器接收到了client事件，将数据打印到了控制台上。
+
+
+
+流程大概如下：
+![流程](./images/emit.jpg)￼
+
+
+我给你，你给我，来而不往非礼也，哲学啊。
+
+
+### emit和on函数
+
+通过上图可以看到，每端总会接收事件和发送事件，socket最关键的就是emit和on两个函数，所有的交互其实就是这两个函数的情感纠葛，你来我往。
+
+emit用来发送一个事件（事件名称用字符串表示），名称可以自定义也可使用默认的事件名称，接着是一个对象，表示发送的内容，如：`socket.emit('chat', {'name':'zhangsan'})`。
+
+on用来接收一个事件（事件名称用字符串表示），然后是响应事件的回调函数，其中函数里面的参数就是收到的数据。如`socket.on('chat',function(data){console.log(data)})`。
+
+
+### 服务端默认事件一览
+
+`io.on('connection', function(socket){})`  socket连接成功时触发，用于初始化
+
+`socket.on('message', function(data, callback){})` 接收客户端通过socket.send传送的消息，data是传输的消息，callback是收到消息后要执行的函数
+
+`socket.on('anything', function(data){})` 收到任何事件都会触发
+
+`socket.on('disconnect', function(){})` socket失去链接时触发，包括关闭浏览器，主动断开，掉线等情况
+
+### 进阶
+
+1、怎么实现私聊？
+
+每个socket都会有一个唯一的id,私聊的实现方式就是找到这个socket对象，发送事件，浏览器接收事件就实现了私聊。
+
+现在有A、B两个链接，B想发送给A，我们拿到A的id告诉服务器，我要发送给A，浏览器从socket数组里面找到这个对应的socket，然后发送事件。
+
+	// client
+	var obj = {
+		toKey:'A的Id'，
+		message:'我想告诉A'
+	}
+	socket.emit('sendOne', obj)
+	
+	//server 
+	// 这里我们借助underscore库
+	
+	socket.on('sendOne', function(obj){
+		var ToSocket = _.findWhere(io.sockets.sockets, {id:obj.id}) // 看这里看这里
+		ToSocket.emit('toOne', obj)
+	})	
+	
+	// 
+	socket.on('toOne', function(obj){
+		// 这里写自己的逻辑 obj就是B私聊给A的信息
+	})
 
